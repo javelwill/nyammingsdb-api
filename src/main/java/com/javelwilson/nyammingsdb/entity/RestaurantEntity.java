@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,4 +30,7 @@ public class RestaurantEntity implements Serializable {
     private String logo;
 
     private int rating;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<LocationEntity> locations;
 }
