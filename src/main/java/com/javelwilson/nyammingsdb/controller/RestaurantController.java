@@ -7,12 +7,14 @@ import com.javelwilson.nyammingsdb.model.RestaurantResponseModel;
 import com.javelwilson.nyammingsdb.service.RestaurantService;
 import com.javelwilson.nyammingsdb.service.RestaurantServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class RestaurantController {
@@ -33,6 +35,20 @@ public class RestaurantController {
         restaurantResponseModel = modelMapper.map(restaurantDto, RestaurantResponseModel.class);
 
         return restaurantResponseModel;
+    }
+
+    @GetMapping("/restaurants")
+    public List<RestaurantResponseModel> getRestaurants(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                  @RequestParam(value = "limit", defaultValue = "2") int limit) {
+
+        List<RestaurantResponseModel> restaurantResponseModels = new ArrayList<>();
+
+        List<RestaurantDto> restaurantDtos = restaurantService.getRestaurants(page, limit);
+
+        Type listType = new TypeToken<List<RestaurantResponseModel>>() {}.getType();
+        restaurantResponseModels = new ModelMapper().map(restaurantDtos, listType);
+
+        return restaurantResponseModels;
     }
 
 }
