@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -24,6 +25,9 @@ public class LocationEntity implements Serializable {
 
     @Column(length = 100, nullable = false)
     private String streetName;
+
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+    private List<OpeningHoursEntity> openingHours;
 
     @ManyToOne
     @JoinColumn(name="restaurant_id")

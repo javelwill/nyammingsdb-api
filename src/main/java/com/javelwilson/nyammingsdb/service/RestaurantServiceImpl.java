@@ -1,6 +1,7 @@
 package com.javelwilson.nyammingsdb.service;
 
 import com.javelwilson.nyammingsdb.dto.LocationDto;
+import com.javelwilson.nyammingsdb.dto.OpeningHoursDto;
 import com.javelwilson.nyammingsdb.dto.RestaurantDto;
 import com.javelwilson.nyammingsdb.entity.RestaurantEntity;
 import com.javelwilson.nyammingsdb.repository.RestaurantRepository;
@@ -32,6 +33,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         for (int i = 0; i < restaurant.getLocations().size(); i++) {
             LocationDto location = restaurant.getLocations().get(i);
+            for (int j = 0; j < location.getOpeningHours().size(); j++) {
+                OpeningHoursDto openingHours = location.getOpeningHours().get(j);
+                openingHours.setLocation(location);
+                location.getOpeningHours().set(j, openingHours);
+            }
             location.setRestaurant(restaurant);
             location.setLocationId(utils.generateLocationId(30));
             restaurant.getLocations().set(i, location);
