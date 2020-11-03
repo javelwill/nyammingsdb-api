@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RestaurantRepository extends PagingAndSortingRepository<RestaurantEntity, Long> {
-
     RestaurantEntity findByName(String name);
+    RestaurantEntity findByRestaurantId(String restaurantId);
 }

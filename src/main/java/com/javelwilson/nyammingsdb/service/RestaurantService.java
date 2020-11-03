@@ -7,4 +7,5 @@ import java.util.List;
 public interface RestaurantService {
     RestaurantDto createRestaurant(RestaurantDto restaurantDto);
     List<RestaurantDto> getRestaurants(int page, int limit);
+    RestaurantDto getRestaurant(String restaurantId);
 }
