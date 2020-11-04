@@ -1,0 +1,18 @@
+package com.javelwilson.nyammingsdb.dto;
+
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+@Data
+public class MenuItemOfferDto {
+    private long id;
+
+    private String offerId;
+
+    private String name;
+
+    private BigDecimal price;
+
+    private MenuItemDto menuItem;
+}

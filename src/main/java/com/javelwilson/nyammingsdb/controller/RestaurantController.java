@@ -10,11 +10,11 @@ import com.javelwilson.nyammingsdb.service.RestaurantServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,6 +26,21 @@ public class RestaurantController {
 
     @Autowired
     LocationServiceImpl locationService;
+
+
+    @GetMapping()
+    public List<RestaurantResponseModel> getRestaurants(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                        @RequestParam(value = "limit", defaultValue = "2") int limit) {
+
+        List<RestaurantResponseModel> restaurantsResponseModel;
+
+        List<RestaurantDto> restaurantsDto = restaurantService.getRestaurants(page, limit);
+
+        Type listType = new TypeToken<List<RestaurantResponseModel>>() {}.getType();
+        restaurantsResponseModel = new ModelMapper().map(restaurantsDto, listType);
+
+        return restaurantsResponseModel;
+    }
 
     @PostMapping()
     public RestaurantResponseModel createRestaurant(@Valid @RequestBody RestaurantRequestModel restaurantRequestModel) {
@@ -42,20 +57,6 @@ public class RestaurantController {
         return restaurantResponseModel;
     }
 
-    @GetMapping()
-    public List<RestaurantResponseModel> getRestaurants(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                  @RequestParam(value = "limit", defaultValue = "2") int limit) {
-
-        List<RestaurantResponseModel> restaurantsResponseModel;
-
-        List<RestaurantDto> restaurantsDto = restaurantService.getRestaurants(page, limit);
-
-        Type listType = new TypeToken<List<RestaurantResponseModel>>() {}.getType();
-        restaurantsResponseModel = new ModelMapper().map(restaurantsDto, listType);
-
-        return restaurantsResponseModel;
-    }
-
     @GetMapping("/{id}")
     public RestaurantResponseModel getRestaurant(@PathVariable String id) {
 
@@ -65,6 +66,22 @@ public class RestaurantController {
 
         ModelMapper modelMapper = new ModelMapper();
         restaurantsResponseModel = modelMapper.map(restaurantsDto, RestaurantResponseModel.class);
+
+        return restaurantsResponseModel;
+    }
+
+    @PutMapping("/{id}")
+    public RestaurantResponseModel updateRestaurant(@PathVariable String id, @RequestBody RestaurantRequestModel restaurantRequestModel) {
+
+        RestaurantDto restaurantDto;
+
+        ModelMapper modelMapper = new ModelMapper();
+        restaurantDto = modelMapper.map(restaurantRequestModel, RestaurantDto.class);
+
+        restaurantDto = restaurantService.updateRestaurant(id, restaurantDto);
+
+        RestaurantResponseModel restaurantsResponseModel;
+        restaurantsResponseModel = modelMapper.map(restaurantDto, RestaurantResponseModel.class);
 
         return restaurantsResponseModel;
     }

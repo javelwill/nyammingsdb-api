@@ -20,7 +20,7 @@ public class RestaurantEntity implements Serializable {
     @Column(nullable = false)
     private String restaurantId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
