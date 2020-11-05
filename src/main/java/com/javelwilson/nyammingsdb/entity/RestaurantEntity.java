@@ -29,7 +29,7 @@ public class RestaurantEntity implements Serializable {
     @Column(nullable = false)
     private String logo;
 
-    private int rating;
+    private Integer rating;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<LocationEntity> locations;

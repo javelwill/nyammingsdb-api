@@ -14,5 +14,5 @@ public class RestaurantRequestModel {
 
     private String logo;
 
-    private int rating;
+    private Integer rating;
 }

@@ -26,22 +26,22 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public List<RestaurantDto> getRestaurants(int page, int limit) {
-        List<RestaurantDto> restaurantDtos = new ArrayList<>();
+        List<RestaurantDto> restaurantsDto = new ArrayList<>();
 
         if (page > 0) page = page - 1;
 
         Pageable pageable = PageRequest.of(page, limit);
 
-        Page<RestaurantEntity> restaurantsPage = restaurantRepository.findAll(pageable);
-        List<RestaurantEntity> restaurants = restaurantsPage.getContent();
+        Page<RestaurantEntity> restaurantPages = restaurantRepository.findAll(pageable);
+        List<RestaurantEntity> restaurantEntities = restaurantPages.getContent();
 
-        for (RestaurantEntity restaurantEntity : restaurants) {
+        for (RestaurantEntity restaurantEntity : restaurantEntities) {
             RestaurantDto restaurantDto = new RestaurantDto();
             BeanUtils.copyProperties(restaurantEntity, restaurantDto);
-            restaurantDtos.add(restaurantDto);
+            restaurantsDto.add(restaurantDto);
         }
 
-        return restaurantDtos;
+        return restaurantsDto;
     }
 
     @Override
@@ -50,38 +50,37 @@ public class RestaurantServiceImpl implements RestaurantService {
             throw new RuntimeException("Record already exists");
 
         ModelMapper modelMapper = new ModelMapper();
+
         RestaurantEntity restaurantEntity = modelMapper.map(newRestaurant, RestaurantEntity.class);
 
         String publicRestaurantId = utils.generateUserId(30);
+
         restaurantEntity.setRestaurantId(publicRestaurantId);
 
-        RestaurantEntity savedRestaurantEntity = restaurantRepository.save(restaurantEntity);
+        restaurantEntity = restaurantRepository.save(restaurantEntity);
 
-        RestaurantDto restaurantDto = modelMapper.map(savedRestaurantEntity, RestaurantDto.class);
+        RestaurantDto restaurantDto = modelMapper.map(restaurantEntity, RestaurantDto.class);
 
         return restaurantDto;
     }
 
     @Override
     public RestaurantDto getRestaurant(String restaurantId) {
-
-        RestaurantDto restaurantDto;
-
         RestaurantEntity restaurantEntity = restaurantRepository.findByRestaurantId(restaurantId);
 
         ModelMapper modelMapper = new ModelMapper();
-        restaurantDto = modelMapper.map(restaurantEntity, RestaurantDto.class);
+
+        RestaurantDto restaurantDto = modelMapper.map(restaurantEntity, RestaurantDto.class);
 
         return restaurantDto;
     }
 
     @Override
-    public RestaurantDto updateRestaurant(String restaurantId, RestaurantDto restaurantUpdate) {
-
+    public RestaurantDto patchRestaurant(String restaurantId, RestaurantDto restaurantUpdate) {
         String name = restaurantUpdate.getName();
         String description = restaurantUpdate.getDescription();
         String logo = restaurantUpdate.getLogo();
-        int rating = restaurantUpdate.getRating();
+        Integer rating = restaurantUpdate.getRating();
 
         RestaurantEntity restaurantEntity = restaurantRepository.findByRestaurantId(restaurantId);
 
@@ -101,11 +100,28 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurantEntity.setLogo(restaurantUpdate.getLogo());
         }
 
-        if (rating != restaurantEntity.getRating()) {
+        if (rating != null) {
             restaurantEntity.setRating(restaurantUpdate.getRating());
         }
 
         restaurantEntity = restaurantRepository.save(restaurantEntity);
+
+        ModelMapper modelMapper = new ModelMapper();
+
+        RestaurantDto restaurantDto = modelMapper.map(restaurantEntity, RestaurantDto.class);
+
+        return restaurantDto;
+    }
+
+    @Override
+    public RestaurantDto deleteRestaurant(String restaurantId) {
+        RestaurantEntity restaurantEntity = restaurantRepository.findByRestaurantId(restaurantId);
+
+        restaurantRepository.delete(restaurantEntity);
+
+        if (restaurantEntity == null) {
+            throw new RuntimeException("Record not found");
+        }
 
         ModelMapper modelMapper = new ModelMapper();
         RestaurantDto restaurantDto = modelMapper.map(restaurantEntity, RestaurantDto.class);

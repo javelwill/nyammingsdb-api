@@ -16,7 +16,7 @@ public class RestaurantDto {
 
     private String logo;
 
-    private int rating;
+    private Integer rating;
 
     private List<LocationDto> locations;
 }

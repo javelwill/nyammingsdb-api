@@ -8,5 +8,6 @@ public interface RestaurantService {
     List<RestaurantDto> getRestaurants(int page, int limit);
     RestaurantDto createRestaurant(RestaurantDto newRestaurant);
     RestaurantDto getRestaurant(String restaurantId);
-    RestaurantDto updateRestaurant(String restaurantId, RestaurantDto restaurantUpdate);
+    RestaurantDto patchRestaurant(String restaurantId, RestaurantDto restaurantUpdate);
+    RestaurantDto deleteRestaurant(String restaurantId);
 }
