@@ -2,9 +2,11 @@ package com.javelwilson.nyammingsdb.service;
 
 import com.javelwilson.nyammingsdb.dto.LocationDto;
 import com.javelwilson.nyammingsdb.entity.LocationEntity;
+import com.javelwilson.nyammingsdb.entity.OpeningHoursEntity;
 import com.javelwilson.nyammingsdb.entity.RestaurantEntity;
 import com.javelwilson.nyammingsdb.repository.LocationRepository;
 import com.javelwilson.nyammingsdb.repository.RestaurantRepository;
+import com.javelwilson.nyammingsdb.shared.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class LocationServiceImpl implements LocationService {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private Utils utils;
 
     @Override
     public LocationDto getLocation(String restaurantId, String locationId) {
@@ -54,6 +59,28 @@ public class LocationServiceImpl implements LocationService {
         }
 
         return locationsDto;
+    }
+
+    @Override
+    public LocationDto createLocation(String restaurantId, LocationDto locationDto) {
+        RestaurantEntity restaurantEntity = restaurantRepository.findByRestaurantId(restaurantId);
+
+        ModelMapper modelMapper = new ModelMapper();
+        LocationEntity locationEntity = modelMapper.map(locationDto, LocationEntity.class);
+
+        for (int i = 0; i < locationEntity.getOpeningHours().size(); i++){
+            OpeningHoursEntity openingHoursEntity = locationEntity.getOpeningHours().get(i);
+            openingHoursEntity.setLocation(locationEntity);
+            locationEntity.getOpeningHours().set(i, openingHoursEntity);
+        }
+
+        locationEntity.setLocationId(utils.generateLocationId(30));
+        locationEntity.setRestaurant(restaurantEntity);
+
+        locationEntity = locationRepository.save(locationEntity);
+        locationDto = modelMapper.map(locationEntity, LocationDto.class);
+
+        return locationDto;
     }
 
 }

@@ -2,6 +2,7 @@ package com.javelwilson.nyammingsdb.controller;
 
 import com.javelwilson.nyammingsdb.dto.LocationDto;
 import com.javelwilson.nyammingsdb.dto.RestaurantDto;
+import com.javelwilson.nyammingsdb.model.LocationRequestModel;
 import com.javelwilson.nyammingsdb.model.LocationResponseModel;
 import com.javelwilson.nyammingsdb.model.RestaurantRequestModel;
 import com.javelwilson.nyammingsdb.model.RestaurantResponseModel;
@@ -31,7 +32,8 @@ public class RestaurantController {
                                                         @RequestParam(value = "limit", defaultValue = "2") int limit) {
         List<RestaurantDto> restaurantsDto = restaurantService.getRestaurants(page, limit);
 
-        Type listType = new TypeToken<List<RestaurantResponseModel>>() {}.getType();
+        Type listType = new TypeToken<List<RestaurantResponseModel>>() {
+        }.getType();
         List<RestaurantResponseModel> restaurantsResponseModel = new ModelMapper().map(restaurantsDto, listType);
 
         return restaurantsResponseModel;
@@ -87,11 +89,25 @@ public class RestaurantController {
         return restaurantsResponseModel;
     }
 
+    @PostMapping("/{id}/locations")
+    public LocationResponseModel addLocation(@PathVariable String id, @RequestBody LocationRequestModel locationRequestModel) {
+        ModelMapper modelMapper = new ModelMapper();
+
+        LocationDto locationDto = modelMapper.map(locationRequestModel, LocationDto.class);
+
+        locationDto = locationService.createLocation(id, locationDto);
+
+        LocationResponseModel locationResponseModel = modelMapper.map(locationDto, LocationResponseModel.class);
+
+        return locationResponseModel;
+    }
+
     @GetMapping("/{id}/locations")
     public List<LocationResponseModel> getRestaurantLocations(@PathVariable String id) {
         List<LocationDto> locationsDto = locationService.getLocations(id);
 
-        Type listType = new TypeToken<List<LocationResponseModel>>() {}.getType();
+        Type listType = new TypeToken<List<LocationResponseModel>>() {
+        }.getType();
         List<LocationResponseModel> locationsResponseModel = new ModelMapper().map(locationsDto, listType);
 
         return locationsResponseModel;

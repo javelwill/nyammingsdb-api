@@ -1,5 +1,6 @@
 package com.javelwilson.nyammingsdb.service;
 
+import com.javelwilson.nyammingsdb.dto.LocationDto;
 import com.javelwilson.nyammingsdb.dto.RestaurantDto;
 
 import java.util.List;

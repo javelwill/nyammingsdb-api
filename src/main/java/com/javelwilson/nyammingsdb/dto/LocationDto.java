@@ -1,6 +1,5 @@
 package com.javelwilson.nyammingsdb.dto;
 
-import com.javelwilson.nyammingsdb.entity.OpeningHoursEntity;
 import lombok.Data;
 
 import java.util.List;

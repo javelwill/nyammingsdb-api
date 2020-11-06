@@ -1,7 +1,12 @@
 package com.javelwilson.nyammingsdb.service;
 
+import com.javelwilson.nyammingsdb.dto.LocationDto;
+import com.javelwilson.nyammingsdb.dto.OpeningHoursDto;
 import com.javelwilson.nyammingsdb.dto.RestaurantDto;
+import com.javelwilson.nyammingsdb.entity.LocationEntity;
+import com.javelwilson.nyammingsdb.entity.OpeningHoursEntity;
 import com.javelwilson.nyammingsdb.entity.RestaurantEntity;
+import com.javelwilson.nyammingsdb.repository.LocationRepository;
 import com.javelwilson.nyammingsdb.repository.RestaurantRepository;
 import com.javelwilson.nyammingsdb.shared.Utils;
 import org.modelmapper.ModelMapper;
@@ -20,6 +25,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     RestaurantRepository restaurantRepository;
+
+    @Autowired
+    LocationRepository locationRepository;
 
     @Autowired
     Utils utils;
