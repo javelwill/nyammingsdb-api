@@ -18,4 +18,6 @@ public class RestaurantResponseModel {
     private int rating;
 
     private List<LocationResponseModel> locations;
+
+    private List<MenuResponseModel> menus;
 }

@@ -19,6 +19,22 @@ public class Utils {
         return generateRandomString(length);
     }
 
+    public String generateMenuId(int length) {
+        return generateRandomString(length);
+    }
+
+    public String generateMenuSectionId(int length) {
+        return generateRandomString(length);
+    }
+
+    public String generateMenuItemId(int length) {
+        return generateRandomString(length);
+    }
+
+    public String generateMenuOfferId(int length) {
+        return generateRandomString(length);
+    }
+
     private String generateRandomString(int length) {
         StringBuilder returnValue = new StringBuilder(length);
 

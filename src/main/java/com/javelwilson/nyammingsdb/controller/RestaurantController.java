@@ -1,12 +1,11 @@
 package com.javelwilson.nyammingsdb.controller;
 
 import com.javelwilson.nyammingsdb.dto.LocationDto;
+import com.javelwilson.nyammingsdb.dto.MenuDto;
 import com.javelwilson.nyammingsdb.dto.RestaurantDto;
-import com.javelwilson.nyammingsdb.model.LocationRequestModel;
-import com.javelwilson.nyammingsdb.model.LocationResponseModel;
-import com.javelwilson.nyammingsdb.model.RestaurantRequestModel;
-import com.javelwilson.nyammingsdb.model.RestaurantResponseModel;
+import com.javelwilson.nyammingsdb.model.*;
 import com.javelwilson.nyammingsdb.service.LocationServiceImpl;
+import com.javelwilson.nyammingsdb.service.MenuServiceImpl;
 import com.javelwilson.nyammingsdb.service.RestaurantServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -22,10 +21,13 @@ import java.util.List;
 public class RestaurantController {
 
     @Autowired
-    RestaurantServiceImpl restaurantService;
+    private RestaurantServiceImpl restaurantService;
 
     @Autowired
-    LocationServiceImpl locationService;
+    private LocationServiceImpl locationService;
+
+    @Autowired
+    private MenuServiceImpl menuService;
 
     @GetMapping()
     public List<RestaurantResponseModel> getRestaurants(@RequestParam(value = "page", defaultValue = "0") int page,
@@ -120,6 +122,39 @@ public class RestaurantController {
         LocationResponseModel locationResponseModel = new ModelMapper().map(locationsDto, LocationResponseModel.class);
 
         return locationResponseModel;
+    }
+
+    @PostMapping("/{id}/menus")
+    public MenuResponseModel addMenu(@PathVariable String id, @RequestBody MenuRequestModel menuRequestModel) {
+        ModelMapper modelMapper = new ModelMapper();
+
+        MenuDto menuDto = modelMapper.map(menuRequestModel, MenuDto.class);
+
+        menuDto = menuService.createMenu(id, menuDto);
+
+        MenuResponseModel menuResponseModel = modelMapper.map(menuDto, MenuResponseModel.class);
+
+        return menuResponseModel;
+    }
+
+    @GetMapping("/{id}/menus")
+    public List<MenuResponseModel> getRestaurantMenus(@PathVariable String id) {
+        List<MenuDto> menusDto = menuService.getMenus(id);
+
+        Type listType = new TypeToken<List<MenuResponseModel>>() {
+        }.getType();
+        List<MenuResponseModel> menusResponseModel = new ModelMapper().map(menusDto, listType);
+
+        return menusResponseModel;
+    }
+
+    @GetMapping("/{restaurantId}/menus/{menuId}")
+    public MenuResponseModel getRestaurantMenu(@PathVariable String restaurantId, @PathVariable String menuId) {
+        MenuDto menuDto = menuService.getMenu(restaurantId, menuId);
+
+        MenuResponseModel menuResponseModel = new ModelMapper().map(menuDto, MenuResponseModel.class);
+
+        return menuResponseModel;
     }
 
 }

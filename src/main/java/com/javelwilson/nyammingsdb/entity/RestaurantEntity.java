@@ -33,4 +33,7 @@ public class RestaurantEntity implements Serializable {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<LocationEntity> locations;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<MenuEntity> menus;
 }

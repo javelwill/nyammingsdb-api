@@ -19,4 +19,6 @@ public class RestaurantDto {
     private Integer rating;
 
     private List<LocationDto> locations;
+
+    private List<MenuDto> menus;
 }
