@@ -16,6 +16,8 @@ import javax.validation.Valid;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 @RequestMapping("/restaurants")
 public class RestaurantController {
@@ -29,7 +31,7 @@ public class RestaurantController {
     @Autowired
     private MenuServiceImpl menuService;
 
-    @GetMapping()
+    @GetMapping(produces = {APPLICATION_JSON_VALUE})
     public List<RestaurantResponseModel> getRestaurants(@RequestParam(value = "page", defaultValue = "0") int page,
                                                         @RequestParam(value = "limit", defaultValue = "2") int limit) {
         List<RestaurantDto> restaurantsDto = restaurantService.getRestaurants(page, limit);
@@ -41,7 +43,7 @@ public class RestaurantController {
         return restaurantsResponseModel;
     }
 
-    @PostMapping()
+    @PostMapping(consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     public RestaurantResponseModel createRestaurant(@Valid @RequestBody RestaurantRequestModel restaurantRequestModel) {
         ModelMapper modelMapper = new ModelMapper();
 
@@ -54,7 +56,7 @@ public class RestaurantController {
         return restaurantResponseModel;
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping(path = "/{id}", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     public RestaurantResponseModel patchRestaurant(@PathVariable String id, @RequestBody RestaurantRequestModel restaurantRequestModel) {
         ModelMapper modelMapper = new ModelMapper();
 
@@ -69,7 +71,7 @@ public class RestaurantController {
         return restaurantsResponseModel;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = {APPLICATION_JSON_VALUE})
     public RestaurantResponseModel getRestaurant(@PathVariable String id) {
         RestaurantDto restaurantsDto = restaurantService.getRestaurant(id);
 
@@ -80,7 +82,7 @@ public class RestaurantController {
         return restaurantsResponseModel;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}", produces = {APPLICATION_JSON_VALUE})
     public RestaurantResponseModel deleteRestaurant(@PathVariable String id) {
         RestaurantDto restaurantDto = restaurantService.deleteRestaurant(id);
 
@@ -91,7 +93,7 @@ public class RestaurantController {
         return restaurantsResponseModel;
     }
 
-    @PostMapping("/{id}/locations")
+    @PostMapping(path = "/{id}/locations", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     public LocationResponseModel addLocation(@PathVariable String id, @RequestBody LocationRequestModel locationRequestModel) {
         ModelMapper modelMapper = new ModelMapper();
 
@@ -104,7 +106,7 @@ public class RestaurantController {
         return locationResponseModel;
     }
 
-    @GetMapping("/{id}/locations")
+    @GetMapping(path = "/{id}/locations", produces = {APPLICATION_JSON_VALUE})
     public List<LocationResponseModel> getRestaurantLocations(@PathVariable String id) {
         List<LocationDto> locationsDto = locationService.getLocations(id);
 
@@ -115,7 +117,7 @@ public class RestaurantController {
         return locationsResponseModel;
     }
 
-    @GetMapping("/{restaurantId}/locations/{locationId}")
+    @GetMapping(path = "/{restaurantId}/locations/{locationId}", produces = {APPLICATION_JSON_VALUE})
     public LocationResponseModel getRestaurantLocation(@PathVariable String restaurantId, @PathVariable String locationId) {
         LocationDto locationsDto = locationService.getLocation(restaurantId, locationId);
 
@@ -124,7 +126,7 @@ public class RestaurantController {
         return locationResponseModel;
     }
 
-    @PostMapping("/{id}/menus")
+    @PostMapping(path = "/{id}/menus", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     public MenuResponseModel addMenu(@PathVariable String id, @RequestBody MenuRequestModel menuRequestModel) {
         ModelMapper modelMapper = new ModelMapper();
 
@@ -137,7 +139,7 @@ public class RestaurantController {
         return menuResponseModel;
     }
 
-    @GetMapping("/{id}/menus")
+    @GetMapping(path = "/{id}/menus", produces = {APPLICATION_JSON_VALUE})
     public List<MenuResponseModel> getRestaurantMenus(@PathVariable String id) {
         List<MenuDto> menusDto = menuService.getMenus(id);
 
@@ -148,7 +150,7 @@ public class RestaurantController {
         return menusResponseModel;
     }
 
-    @GetMapping("/{restaurantId}/menus/{menuId}")
+    @GetMapping(path = "/{restaurantId}/menus/{menuId}", produces = {APPLICATION_JSON_VALUE})
     public MenuResponseModel getRestaurantMenu(@PathVariable String restaurantId, @PathVariable String menuId) {
         MenuDto menuDto = menuService.getMenu(restaurantId, menuId);
 

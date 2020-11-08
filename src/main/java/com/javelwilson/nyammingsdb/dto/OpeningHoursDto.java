@@ -1,6 +1,5 @@
 package com.javelwilson.nyammingsdb.dto;
 
-import com.javelwilson.nyammingsdb.entity.LocationEntity;
 import lombok.Data;
 
 import java.sql.Time;
