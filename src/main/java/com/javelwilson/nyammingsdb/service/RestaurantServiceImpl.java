@@ -1,10 +1,6 @@
 package com.javelwilson.nyammingsdb.service;
 
-import com.javelwilson.nyammingsdb.dto.LocationDto;
-import com.javelwilson.nyammingsdb.dto.OpeningHoursDto;
 import com.javelwilson.nyammingsdb.dto.RestaurantDto;
-import com.javelwilson.nyammingsdb.entity.LocationEntity;
-import com.javelwilson.nyammingsdb.entity.OpeningHoursEntity;
 import com.javelwilson.nyammingsdb.entity.RestaurantEntity;
 import com.javelwilson.nyammingsdb.repository.LocationRepository;
 import com.javelwilson.nyammingsdb.repository.RestaurantRepository;
@@ -37,6 +33,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         List<RestaurantDto> restaurantsDto = new ArrayList<>();
 
         if (page > 0) page = page - 1;
+        if (limit > 50) limit = 50;
 
         Pageable pageable = PageRequest.of(page, limit);
 
@@ -88,7 +85,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         String name = restaurantUpdate.getName();
         String description = restaurantUpdate.getDescription();
         String logo = restaurantUpdate.getLogo();
-        Integer rating = restaurantUpdate.getRating();
+        Double rating = restaurantUpdate.getStarRating();
 
         RestaurantEntity restaurantEntity = restaurantRepository.findByRestaurantId(restaurantId);
 
@@ -109,7 +106,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
 
         if (rating != null) {
-            restaurantEntity.setRating(restaurantUpdate.getRating());
+            restaurantEntity.setStarRating(restaurantUpdate.getStarRating());
         }
 
         restaurantEntity = restaurantRepository.save(restaurantEntity);

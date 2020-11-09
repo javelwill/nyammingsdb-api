@@ -2,22 +2,30 @@ package com.javelwilson.nyammingsdb.controller;
 
 import com.javelwilson.nyammingsdb.model.*;
 import io.swagger.annotations.Api;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-
 @Api(value = "Restaurants", tags = {"Restaurants"}, description = "REST API for Restaurants")
+@Validated
 public interface RestaurantController {
 
     @GetMapping(produces = {APPLICATION_JSON_VALUE})
-    List<RestaurantResponseModel> getRestaurants(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "limit", defaultValue = "2") int limit);
+    List<RestaurantResponseModel> getRestaurants(@RequestParam(value = "page", defaultValue = "0")
+                                                         int page,
+                                                 @RequestParam(value = "limit", defaultValue = "10")
+                                                 @Min(1) @Max(50)
+                                                         int limit);
 
     @PostMapping(consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
-    RestaurantResponseModel createRestaurant(@Valid @RequestBody  RestaurantRequestModel restaurantRequestModel);
+    RestaurantResponseModel createRestaurant(@Valid @RequestBody RestaurantRequestModel restaurantRequestModel);
 
     @PatchMapping(path = "/{id}", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     RestaurantResponseModel patchRestaurant(@PathVariable String id, @RequestBody RestaurantRequestModel restaurantRequestModel);

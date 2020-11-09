@@ -15,9 +15,29 @@ public class RestaurantResponseModel {
 
     private String logo;
 
-    private int rating;
+    private Double starRating;
 
-    private List<LocationResponseModel> locations;
+    private Boolean acceptsReservations;
+
+    private Boolean hasMenu;
+
+    private Boolean hasPos;
+
+    private Integer priceRange;
+
+    private String email;
+
+    private String telephone;
+
+    private String faxNumber;
+
+    private String slogan;
+
+    private String address;
+
+    private List<RestaurantPhotosResponseModel> photos;
 
     private List<MenuResponseModel> menus;
+
+    private List<LocationResponseModel> locations;
 }

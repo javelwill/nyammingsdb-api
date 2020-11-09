@@ -23,17 +23,36 @@ public class RestaurantEntity implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
     private String logo;
 
-    private Integer rating;
+    private Double starRating;
+
+    private Boolean acceptsReservations;
+
+    private Boolean hasMenu;
+
+    private Boolean hasPos;
+
+    private Integer priceRange;
+
+    private String email;
+
+    private String telephone;
+
+    private String faxNumber;
+
+    private String slogan;
+
+    private String address;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<LocationEntity> locations;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<MenuEntity> menus;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<RestaurantPhotosEntity> photos;
 }

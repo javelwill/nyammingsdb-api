@@ -16,9 +16,29 @@ public class RestaurantDto {
 
     private String logo;
 
-    private Integer rating;
+    private Double starRating;
+
+    private Boolean acceptsReservations;
+
+    private Boolean hasMenu;
+
+    private Boolean hasPos;
+
+    private Integer priceRange;
+
+    private String email;
+
+    private String telephone;
+
+    private String faxNumber;
+
+    private String slogan;
+
+    private String address;
 
     private List<LocationDto> locations;
 
     private List<MenuDto> menus;
+
+    private List<RestaurantPhotosDto> photos;
 }
