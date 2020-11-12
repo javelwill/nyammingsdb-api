@@ -1,6 +1,8 @@
 package com.javelwilson.nyammingsdb.service;
 
+import com.javelwilson.nyammingsdb.dto.PhotoDto;
 import com.javelwilson.nyammingsdb.dto.RestaurantDto;
+import com.javelwilson.nyammingsdb.entity.PhotoEntity;
 import com.javelwilson.nyammingsdb.entity.RestaurantEntity;
 import com.javelwilson.nyammingsdb.repository.LocationRepository;
 import com.javelwilson.nyammingsdb.repository.RestaurantRepository;

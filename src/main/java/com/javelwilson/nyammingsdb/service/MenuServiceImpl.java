@@ -1,10 +1,7 @@
 package com.javelwilson.nyammingsdb.service;
 
 import com.javelwilson.nyammingsdb.dto.MenuDto;
-import com.javelwilson.nyammingsdb.entity.MenuEntity;
-import com.javelwilson.nyammingsdb.entity.MenuItemEntity;
-import com.javelwilson.nyammingsdb.entity.MenuSectionEntity;
-import com.javelwilson.nyammingsdb.entity.RestaurantEntity;
+import com.javelwilson.nyammingsdb.entity.*;
 import com.javelwilson.nyammingsdb.repository.MenuRepository;
 import com.javelwilson.nyammingsdb.repository.RestaurantRepository;
 import com.javelwilson.nyammingsdb.shared.Utils;
@@ -45,6 +42,12 @@ public class MenuServiceImpl implements MenuService {
                 MenuItemEntity menuItemEntity = menuSectionEntity.getMenuItems().get(j);
                 menuItemEntity.setMenuItemId(utils.generateMenuItemId(30));
                 menuItemEntity.setMenuSection(menuSectionEntity);
+
+                for (int k = 0; k < menuItemEntity.getOffers().size(); k++) {
+                    MenuItemOfferEntity menuItemOfferEntity = menuItemEntity.getOffers().get(k);
+                    menuItemOfferEntity.setMenuItemOfferId(utils.generateMenuOfferId(30));
+                    menuItemOfferEntity.setMenuItem(menuItemEntity);
+                }
             }
         }
 

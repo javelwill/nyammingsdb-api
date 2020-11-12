@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -25,6 +26,14 @@ public class LocationEntity implements Serializable {
 
     @Column(length = 100, nullable = false)
     private String streetName;
+
+    private BigDecimal starRating;
+
+    private String photo1;
+
+    private String photo2;
+
+    private String photo3;
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
     private List<OpeningHoursEntity> openingHours;

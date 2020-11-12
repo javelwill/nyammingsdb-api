@@ -29,6 +29,12 @@ public class RestaurantEntity implements Serializable {
 
     private Double starRating;
 
+    private String photo1;
+
+    private String photo2;
+
+    private String photo3;
+
     private Boolean acceptsReservations;
 
     private Boolean hasMenu;
@@ -52,7 +58,4 @@ public class RestaurantEntity implements Serializable {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<MenuEntity> menus;
-
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
-    private List<RestaurantPhotosEntity> photos;
 }

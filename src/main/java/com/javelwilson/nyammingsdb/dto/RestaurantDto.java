@@ -18,6 +18,12 @@ public class RestaurantDto {
 
     private Double starRating;
 
+    private String photo1;
+
+    private String photo2;
+
+    private String photo3;
+
     private Boolean acceptsReservations;
 
     private Boolean hasMenu;
@@ -39,6 +45,4 @@ public class RestaurantDto {
     private List<LocationDto> locations;
 
     private List<MenuDto> menus;
-
-    private List<RestaurantPhotosDto> photos;
 }

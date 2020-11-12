@@ -21,6 +21,12 @@ public class RestaurantRequestModel {
     @Max(value = 5, message = "starRating must be between 0 and 5")
     private Integer starRating;
 
+    private String photo1;
+
+    private String photo2;
+
+    private String photo3;
+
     private Boolean acceptsReservations;
 
     private Boolean hasMenu;
@@ -42,6 +48,4 @@ public class RestaurantRequestModel {
     private List<LocationRequestModel> locations;
 
     private List<MenuItemRequestModel> menus;
-
-    private List<RestaurantPhotosRequestModel> photos;
 }

@@ -23,7 +23,11 @@ public class MenuItemEntity {
 
     private BigDecimal price;
 
-    private String image;
+    private String photo1;
+
+    private String photo2;
+
+    private String photo3;
 
     @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL)
     private List<MenuItemOfferEntity> offers;

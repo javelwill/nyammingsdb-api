@@ -17,6 +17,12 @@ public class RestaurantResponseModel {
 
     private Double starRating;
 
+    private String photo1;
+
+    private String photo2;
+
+    private String photo3;
+
     private Boolean acceptsReservations;
 
     private Boolean hasMenu;
@@ -34,8 +40,6 @@ public class RestaurantResponseModel {
     private String slogan;
 
     private String address;
-
-    private List<RestaurantPhotosResponseModel> photos;
 
     private List<MenuResponseModel> menus;
 

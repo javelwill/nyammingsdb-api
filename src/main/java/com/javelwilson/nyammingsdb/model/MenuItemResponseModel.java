@@ -1,7 +1,5 @@
 package com.javelwilson.nyammingsdb.model;
 
-import com.javelwilson.nyammingsdb.dto.MenuItemOfferDto;
-import com.javelwilson.nyammingsdb.dto.MenuSectionDto;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -17,7 +15,11 @@ public class MenuItemResponseModel {
 
     private BigDecimal price;
 
-    private String image;
+    private String photo1;
+
+    private String photo2;
+
+    private String photo3;
 
     private List<MenuItemOfferResponseModel> offers;
 }
