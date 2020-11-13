@@ -13,11 +13,17 @@ public class MenuItemOfferEntity {
     @GeneratedValue
     private long id;
 
-    private String menuItemOfferId;
+    private String offerId;
 
     private String name;
 
     private BigDecimal price;
+
+    private String description;
+
+    private String type;
+
+    private Boolean required;
 
     @ManyToOne
     @JoinColumn(name = "menu_item_id")

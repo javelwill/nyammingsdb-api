@@ -27,6 +27,8 @@ public class RestaurantEntity implements Serializable {
 
     private String logo;
 
+    private String slogan;
+
     private Double starRating;
 
     private String photo1;
@@ -41,15 +43,13 @@ public class RestaurantEntity implements Serializable {
 
     private Boolean hasPos;
 
-    private Integer priceRange;
+    private Double priceRange;
 
     private String email;
 
     private String telephone;
 
     private String faxNumber;
-
-    private String slogan;
 
     private String address;
 

@@ -14,5 +14,11 @@ public class MenuItemOfferDto {
 
     private BigDecimal price;
 
+    private String description;
+
+    private String type;
+
+    private Boolean required;
+
     private MenuItemDto menuItem;
 }

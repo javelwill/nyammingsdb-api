@@ -11,7 +11,7 @@ public class RestaurantDto {
     private String restaurantId;
 
     private String name;
-
+    
     private String description;
 
     private String logo;

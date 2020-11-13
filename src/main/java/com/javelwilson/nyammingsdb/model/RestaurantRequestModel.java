@@ -19,7 +19,7 @@ public class RestaurantRequestModel {
 
     @Min(value = 0, message = "starRating must be between 0 and 5")
     @Max(value = 5, message = "starRating must be between 0 and 5")
-    private Integer starRating;
+    private Double starRating;
 
     private String photo1;
 

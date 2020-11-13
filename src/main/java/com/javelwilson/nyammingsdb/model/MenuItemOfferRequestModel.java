@@ -9,4 +9,10 @@ public class MenuItemOfferRequestModel {
     private String name;
 
     private BigDecimal price;
+
+    private String description;
+
+    private String type;
+
+    private Boolean required;
 }

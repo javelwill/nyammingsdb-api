@@ -45,7 +45,7 @@ public class MenuServiceImpl implements MenuService {
 
                 for (int k = 0; k < menuItemEntity.getOffers().size(); k++) {
                     MenuItemOfferEntity menuItemOfferEntity = menuItemEntity.getOffers().get(k);
-                    menuItemOfferEntity.setMenuItemOfferId(utils.generateMenuOfferId(30));
+                    menuItemOfferEntity.setOfferId(utils.generateMenuOfferId(30));
                     menuItemOfferEntity.setMenuItem(menuItemEntity);
                 }
             }

@@ -29,7 +29,7 @@ public class RestaurantResponseModel {
 
     private Boolean hasPos;
 
-    private Integer priceRange;
+    private Double priceRange;
 
     private String email;
 
