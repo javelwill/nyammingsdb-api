@@ -11,7 +11,7 @@ public class RestaurantDto {
     private String restaurantId;
 
     private String name;
-    
+
     private String description;
 
     private String logo;
@@ -30,7 +30,7 @@ public class RestaurantDto {
 
     private Boolean hasPos;
 
-    private Integer priceRange;
+    private Double priceRange;
 
     private String email;
 

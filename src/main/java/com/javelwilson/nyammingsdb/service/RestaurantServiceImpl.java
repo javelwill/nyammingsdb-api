@@ -87,7 +87,19 @@ public class RestaurantServiceImpl implements RestaurantService {
         String name = restaurantUpdate.getName();
         String description = restaurantUpdate.getDescription();
         String logo = restaurantUpdate.getLogo();
-        Double rating = restaurantUpdate.getStarRating();
+        Double starRating = restaurantUpdate.getStarRating();
+        String photo1 = restaurantUpdate.getPhoto1();
+        String photo2 = restaurantUpdate.getPhoto2();
+        String photo3 = restaurantUpdate.getPhoto3();
+        Boolean acceptsReservations = restaurantUpdate.getAcceptsReservations();
+        Boolean hasPos = restaurantUpdate.getHasPos();
+        Boolean hasMenu = restaurantUpdate.getHasMenu();
+        Double priceRange = restaurantUpdate.getPriceRange();
+        String email = restaurantUpdate.getEmail();
+        String telephone = restaurantUpdate.getTelephone();
+        String faxNumber = restaurantUpdate.getFaxNumber();
+        String slogan = restaurantUpdate.getSlogan();
+        String address = restaurantUpdate.getAddress();
 
         RestaurantEntity restaurantEntity = restaurantRepository.findByRestaurantId(restaurantId);
 
@@ -96,20 +108,69 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
 
         if (name != null) {
-            restaurantEntity.setName(restaurantUpdate.getName());
+            restaurantEntity.setName(name);
         }
 
         if (description != null) {
-            restaurantEntity.setDescription(restaurantUpdate.getDescription());
+            restaurantEntity.setDescription(description);
         }
 
         if (logo != null) {
-            restaurantEntity.setLogo(restaurantUpdate.getLogo());
+            restaurantEntity.setLogo(logo);
         }
 
-        if (rating != null) {
-            restaurantEntity.setStarRating(restaurantUpdate.getStarRating());
+        if (starRating != null) {
+            restaurantEntity.setStarRating(starRating);
         }
+
+        if (photo1 != null) {
+            restaurantEntity.setPhoto1(photo1);
+        }
+
+        if (photo2 != null) {
+            restaurantEntity.setPhoto2(photo2);
+        }
+
+        if (photo3 != null) {
+            restaurantEntity.setPhoto3(photo3);
+        }
+
+        if (acceptsReservations != null) {
+            restaurantEntity.setAcceptsReservations(acceptsReservations);
+        }
+
+        if (hasMenu != null) {
+            restaurantEntity.setHasMenu(hasMenu);
+        }
+
+        if (hasPos != null) {
+            restaurantEntity.setHasPos(hasPos);
+        }
+
+        if (priceRange != null) {
+            restaurantEntity.setPriceRange(priceRange);
+        }
+
+        if (email != null) {
+            restaurantEntity.setEmail(email);
+        }
+
+        if (telephone != null) {
+            restaurantEntity.setTelephone(telephone);
+        }
+
+        if (faxNumber != null) {
+            restaurantEntity.setFaxNumber(faxNumber);
+        }
+
+        if (slogan != null) {
+            restaurantEntity.setSlogan(slogan);
+        }
+
+        if (address != null) {
+            restaurantEntity.setAddress(slogan);
+        }
+
 
         restaurantEntity = restaurantRepository.save(restaurantEntity);
 
