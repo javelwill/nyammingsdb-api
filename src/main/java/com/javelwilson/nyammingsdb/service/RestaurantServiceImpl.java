@@ -1,8 +1,6 @@
 package com.javelwilson.nyammingsdb.service;
 
-import com.javelwilson.nyammingsdb.dto.PhotoDto;
 import com.javelwilson.nyammingsdb.dto.RestaurantDto;
-import com.javelwilson.nyammingsdb.entity.PhotoEntity;
 import com.javelwilson.nyammingsdb.entity.RestaurantEntity;
 import com.javelwilson.nyammingsdb.repository.LocationRepository;
 import com.javelwilson.nyammingsdb.repository.RestaurantRepository;
@@ -60,7 +58,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         RestaurantEntity restaurantEntity = modelMapper.map(newRestaurant, RestaurantEntity.class);
 
-        String publicRestaurantId = utils.generateUserId(30);
+        String publicRestaurantId = utils.generateRestaurantId(30);
 
         restaurantEntity.setRestaurantId(publicRestaurantId);
 
@@ -74,6 +72,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public RestaurantDto getRestaurant(String restaurantId) {
         RestaurantEntity restaurantEntity = restaurantRepository.findByRestaurantId(restaurantId);
+
+        if (restaurantEntity == null) {
+            throw new RuntimeException("Restaurant Not Found");
+        }
 
         ModelMapper modelMapper = new ModelMapper();
 
