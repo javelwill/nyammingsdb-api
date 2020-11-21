@@ -2,20 +2,24 @@ package com.javelwilson.nyammingsdb.service;
 
 import com.javelwilson.nyammingsdb.dto.UserDto;
 import com.javelwilson.nyammingsdb.entity.UserEntity;
-import com.javelwilson.nyammingsdb.model.UserRequestModel;
 import com.javelwilson.nyammingsdb.repository.UserRepository;
 import com.javelwilson.nyammingsdb.shared.Utils;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -50,7 +54,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email);
-        if(userEntity == null) throw new UsernameNotFoundException(email);
+        if (userEntity == null) throw new UsernameNotFoundException(email);
         return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
     }
 
@@ -64,6 +68,23 @@ public class UserService implements UserDetailsService {
         ModelMapper modelMapper = new ModelMapper();
         UserDto userDto = modelMapper.map(userEntity, UserDto.class);
         return userDto;
+    }
+
+    public List<UserDto> getUsers(int page, int limit) {
+
+        if (page > 0) page = page - 1;
+        if (limit > 50) limit = 50;
+        
+        Pageable pageRequest = PageRequest.of(page, limit);
+
+        Page<UserEntity> userPages = userRepository.findAll(pageRequest);
+        List<UserEntity> userEntities = userPages.getContent();
+
+        Type listType = new TypeToken<List<UserDto>>(){}.getType();
+        ModelMapper modelMapper = new ModelMapper();
+        List<UserDto> usersDto = modelMapper.map(userEntities, listType);
+
+        return usersDto;
     }
 
     public UserDto updateUser(String userId, UserDto userDto) {
