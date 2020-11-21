@@ -2,6 +2,7 @@ package com.javelwilson.nyammingsdb.service;
 
 import com.javelwilson.nyammingsdb.dto.UserDto;
 import com.javelwilson.nyammingsdb.entity.UserEntity;
+import com.javelwilson.nyammingsdb.model.UserRequestModel;
 import com.javelwilson.nyammingsdb.repository.UserRepository;
 import com.javelwilson.nyammingsdb.shared.Utils;
 import org.modelmapper.ModelMapper;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 
@@ -29,7 +31,7 @@ public class UserService implements UserDetailsService {
 
     public UserDto createUser(UserDto userDto) {
 
-        if (userRepository.findUserByEmail(userDto.getEmail()) != null) throw new RuntimeException("Record Already Exists");
+        if (userRepository.findByEmail(userDto.getEmail()) != null) throw new RuntimeException("Record Already Exists");
 
         ModelMapper modelMapper = new ModelMapper();
 
@@ -47,8 +49,53 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findUserByEmail(email);
+        UserEntity userEntity = userRepository.findByEmail(email);
         if(userEntity == null) throw new UsernameNotFoundException(email);
         return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+    }
+
+    public UserDto getUserById(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new RuntimeException("User Not Found");
+        }
+
+        ModelMapper modelMapper = new ModelMapper();
+        UserDto userDto = modelMapper.map(userEntity, UserDto.class);
+        return userDto;
+    }
+
+    public UserDto updateUser(String userId, UserDto userDto) {
+        String firstName = userDto.getFirstName();
+        String lastName = userDto.getLastName();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if (userEntity == null) {
+            throw new RuntimeException("User Not Found");
+        }
+
+        if (firstName != null) {
+            userEntity.setFirstName(firstName);
+        }
+
+        if (lastName != null) {
+            userEntity.setLastName(lastName);
+        }
+
+        userEntity = userRepository.save(userEntity);
+
+        ModelMapper modelMapper = new ModelMapper();
+        userDto = modelMapper.map(userEntity, UserDto.class);
+
+        return userDto;
+    }
+
+    public void deleteUser(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new RuntimeException("User Not Found");
+        }
+        userRepository.delete(userEntity);
     }
 }
