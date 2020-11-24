@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -34,6 +35,12 @@ public class UserEntity implements Serializable {
 
     @Column(nullable = false)
     private Boolean emailVerificationStatus = false;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @JoinTable(name="users_roles",
+            joinColumns=@JoinColumn(name="users_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name="roles_id", referencedColumnName = "id"))
+    private Collection<RoleEntity> roles;
 
 
 
