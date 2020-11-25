@@ -1,5 +1,6 @@
 package com.javelwilson.nyammingsdb.security;
 
+import com.javelwilson.nyammingsdb.repository.UserRepository;
 import com.javelwilson.nyammingsdb.service.UserService;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,11 +16,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SecurityConstants securityConstants;
+    private final UserRepository userRepository;
 
-    public WebSecurity(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, SecurityConstants securityConstants) {
+    public WebSecurity(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, SecurityConstants securityConstants, UserRepository userRepository) {
         this.userService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.securityConstants = securityConstants;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -29,11 +32,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/users")
                 .permitAll()
+                .antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("DELETE_AUTHORITY")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(),securityConstants))
-                .addFilter(new AuthorizationFilter(authenticationManager(), securityConstants))
+                .addFilter(new AuthorizationFilter(authenticationManager(), securityConstants, userRepository))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

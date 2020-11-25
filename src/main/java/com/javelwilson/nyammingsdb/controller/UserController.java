@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -66,6 +68,7 @@ public class UserController {
 
         ModelMapper modelMapper = new ModelMapper();
         UserDto userDto = modelMapper.map(userRequestModel, UserDto.class);
+        userDto.setRoles(new HashSet<>(Arrays.asList("ROLE_USER")));
 
         userDto = userService.createUser(userDto);
         userResponseModel = modelMapper.map(userDto, UserResponseModel.class);

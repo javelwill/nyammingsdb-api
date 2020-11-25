@@ -1,8 +1,11 @@
 package com.javelwilson.nyammingsdb.service;
 
 import com.javelwilson.nyammingsdb.dto.UserDto;
+import com.javelwilson.nyammingsdb.entity.RoleEntity;
 import com.javelwilson.nyammingsdb.entity.UserEntity;
+import com.javelwilson.nyammingsdb.repository.RoleRepository;
 import com.javelwilson.nyammingsdb.repository.UserRepository;
+import com.javelwilson.nyammingsdb.security.UserPrincipal;
 import com.javelwilson.nyammingsdb.shared.Utils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -19,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -26,6 +31,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Autowired
     Utils utils;
@@ -39,10 +47,21 @@ public class UserService implements UserDetailsService {
 
         ModelMapper modelMapper = new ModelMapper();
 
-        userDto.setUserId(utils.generateUserId(30));
-        userDto.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
-
         UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
+
+        userEntity.setUserId(utils.generateUserId(30));
+        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+
+        Collection<RoleEntity> roleEntities = new HashSet<>();
+
+        for(String role: userDto.getRoles()) {
+            RoleEntity roleEntity = roleRepository.findByName(role);
+            if(roleEntity != null) {
+                roleEntities.add(roleEntity);
+            }
+        }
+
+        userEntity.setRoles(roleEntities);
 
         userEntity = userRepository.save(userEntity);
 
@@ -55,7 +74,10 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email);
         if (userEntity == null) throw new UsernameNotFoundException(email);
-        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+
+        return new UserPrincipal(userEntity);
+
+//        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
     }
 
     public UserDto getUserById(String userId) {

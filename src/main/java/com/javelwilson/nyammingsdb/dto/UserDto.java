@@ -3,6 +3,7 @@ package com.javelwilson.nyammingsdb.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 @Data
 public class UserDto implements Serializable {
@@ -16,4 +17,5 @@ public class UserDto implements Serializable {
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerifcationStatus = false;
+    private Collection<String> roles;
 }
