@@ -29,7 +29,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .headers().frameOptions().sameOrigin()
+                .and()
                 .authorizeRequests()
+                .antMatchers("/h2-console/**")
+                .permitAll()
                 .antMatchers(HttpMethod.POST, "/users")
                 .permitAll()
                 .antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("DELETE_AUTHORITY")
