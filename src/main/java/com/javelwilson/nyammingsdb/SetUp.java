@@ -8,6 +8,7 @@ import com.javelwilson.nyammingsdb.repository.RoleRepository;
 import com.javelwilson.nyammingsdb.repository.UserRepository;
 import com.javelwilson.nyammingsdb.shared.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +33,15 @@ public class SetUp {
     @Autowired
     private Utils utils;
 
-    private String email = "javelawilson@gmail.com";
+    @Value("${application.admin.firstname}")
+    private String firstName;
+    @Value("${application.admin.lastname}")
+    private String lastname;
+    @Value("${application.admin.email}")
+    private String email;
+    @Value("${application.admin.password}")
+    private String password;
+
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -54,12 +63,12 @@ public class SetUp {
         if (userRepository.findByEmail(email) != null) return;
 
         UserEntity adminUser = new UserEntity();
-        adminUser.setFirstName("Javel");
-        adminUser.setLastName("Wilson");
+        adminUser.setFirstName(firstName);
+        adminUser.setLastName(lastname);
         adminUser.setEmail(email);
         adminUser.setEmailVerificationStatus(true);
         adminUser.setUserId(utils.generateUserId(30));
-        adminUser.setEncryptedPassword(bCryptPasswordEncoder.encode("12345678"));
+        adminUser.setEncryptedPassword(bCryptPasswordEncoder.encode(password));
         adminUser.setRoles(Arrays.asList(roleAdmin));
 
         userRepository.save(adminUser);
