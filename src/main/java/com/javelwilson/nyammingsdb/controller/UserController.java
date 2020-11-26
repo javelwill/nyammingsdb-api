@@ -1,7 +1,6 @@
 package com.javelwilson.nyammingsdb.controller;
 
 import com.javelwilson.nyammingsdb.dto.UserDto;
-import com.javelwilson.nyammingsdb.model.RestaurantResponseModel;
 import com.javelwilson.nyammingsdb.model.UserRequestModel;
 import com.javelwilson.nyammingsdb.model.UserResponseModel;
 import com.javelwilson.nyammingsdb.service.UserService;

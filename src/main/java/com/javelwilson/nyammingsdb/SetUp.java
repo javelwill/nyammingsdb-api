@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @Component
-public class InitialUsersSetup {
+public class SetUp {
 
     @Autowired
     private AuthorityRepository authorityRepository;
@@ -32,7 +32,7 @@ public class InitialUsersSetup {
     @Autowired
     private Utils utils;
 
-    private String email = "test@test@gmail.com";
+    private String email = "javelawilson@gmail.com";
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
