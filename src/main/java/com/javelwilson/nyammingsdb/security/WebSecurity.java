@@ -34,6 +34,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/h2-console/**")
                 .permitAll()
+                .antMatchers("/actuator/**")
+                .permitAll()
                 .antMatchers(HttpMethod.POST, "/users")
                 .permitAll()
                 .antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("DELETE_AUTHORITY")
