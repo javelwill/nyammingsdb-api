@@ -6,7 +6,7 @@ import com.javelwilson.nyammingsdb.entity.UserEntity;
 import com.javelwilson.nyammingsdb.repository.RoleRepository;
 import com.javelwilson.nyammingsdb.repository.UserRepository;
 import com.javelwilson.nyammingsdb.security.UserPrincipal;
-import com.javelwilson.nyammingsdb.shared.Utils;
+import com.javelwilson.nyammingsdb.shared.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +37,9 @@ public class UserService implements UserDetailsService {
     Utils utils;
 
     @Autowired
+    AmazonSES amazonSES;
+
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserDto createUser(UserDto userDto) {
@@ -47,8 +50,11 @@ public class UserService implements UserDetailsService {
 
         UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
 
-        userEntity.setUserId(utils.generateUserId(30));
+        String userId = utils.generateUserId(30);
+        userEntity.setUserId(userId);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(userId));
+        userEntity.setEmailVerificationStatus(false);
 
         Collection<RoleEntity> roleEntities = new HashSet<>();
 
@@ -64,6 +70,8 @@ public class UserService implements UserDetailsService {
         userEntity = userRepository.save(userEntity);
 
         userDto = modelMapper.map(userEntity, UserDto.class);
+
+        amazonSES.verifyEmail(userDto);
 
         return userDto;
     }
@@ -138,5 +146,21 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("User Not Found");
         }
         userRepository.delete(userEntity);
+    }
+
+    public boolean verifyEmailToken(String token) {
+        UserEntity userEntity = userRepository.findUserByEmailVerificationToken(token);
+
+        if (userEntity != null) {
+            boolean hasTokenExpired = utils.hasTokenExpired(token);
+            if (!hasTokenExpired) {
+                userEntity.setEmailVerificationToken(null);
+                userEntity.setEmailVerificationStatus(true);
+                userRepository.save(userEntity);
+                return true;
+            }
+        }
+
+        return false;
     }
 }

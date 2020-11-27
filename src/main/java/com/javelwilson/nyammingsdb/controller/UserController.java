@@ -74,4 +74,12 @@ public class UserController {
 
         return userResponseModel;
     }
+
+    @GetMapping(path = "/email-verification", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
+    public void verifyEmailToken(@RequestParam(value="token") String token) {
+        boolean isVerified = userService.verifyEmailToken(token);
+        if (!isVerified) {
+            throw new RuntimeException("Token Not Verified");
+        }
+    }
 }

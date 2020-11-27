@@ -38,6 +38,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/users")
                 .permitAll()
+                .antMatchers(HttpMethod.GET, "/users/email-verification")
+                .permitAll()
                 .antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("DELETE_AUTHORITY")
                 .anyRequest()
                 .authenticated()
