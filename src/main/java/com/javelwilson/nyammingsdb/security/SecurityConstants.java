@@ -12,4 +12,5 @@ public class SecurityConstants {
     private String tokenPrefix;
     private String header;
     private long expirationTime;
+    private long passwordResetExpiration;
 }

@@ -77,4 +77,13 @@ public class Utils {
 
         return new String(returnValue);
     }
+
+    public String generatePasswordResetToken(String userId) {
+        String token = Jwts.builder()
+                .setSubject(userId)
+                .setExpiration(new Date(System.currentTimeMillis() + securityConstants.getExpirationTime()))
+                .signWith(SignatureAlgorithm.HS512, securityConstants.getSecret())
+                .compact();
+        return token;
+    }
 }

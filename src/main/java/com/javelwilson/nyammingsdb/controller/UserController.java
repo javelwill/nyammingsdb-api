@@ -1,6 +1,8 @@
 package com.javelwilson.nyammingsdb.controller;
 
 import com.javelwilson.nyammingsdb.dto.UserDto;
+import com.javelwilson.nyammingsdb.model.PasswordResetRequestModel;
+import com.javelwilson.nyammingsdb.model.ResetPasswordRequestModel;
 import com.javelwilson.nyammingsdb.model.UserRequestModel;
 import com.javelwilson.nyammingsdb.model.UserResponseModel;
 import com.javelwilson.nyammingsdb.service.UserService;
@@ -81,5 +83,15 @@ public class UserController {
         if (!isVerified) {
             throw new RuntimeException("Token Not Verified");
         }
+    }
+
+    @PostMapping(path="/password-reset-request", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
+    public void passwordReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
+        userService.requestPassordReset(passwordResetRequestModel.getEmail());
+    }
+
+    @PostMapping(path="/reset-password", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
+    public void resetPassword(@RequestBody ResetPasswordRequestModel resetPasswordRequestModel) {
+        userService.resetPassword(resetPasswordRequestModel.getToken(), resetPasswordRequestModel.getPassword());
     }
 }

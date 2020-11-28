@@ -1,12 +1,15 @@
 package com.javelwilson.nyammingsdb.service;
 
 import com.javelwilson.nyammingsdb.dto.UserDto;
+import com.javelwilson.nyammingsdb.entity.PasswordResetTokenEntity;
 import com.javelwilson.nyammingsdb.entity.RoleEntity;
 import com.javelwilson.nyammingsdb.entity.UserEntity;
+import com.javelwilson.nyammingsdb.repository.PasswordResetTokenRepository;
 import com.javelwilson.nyammingsdb.repository.RoleRepository;
 import com.javelwilson.nyammingsdb.repository.UserRepository;
 import com.javelwilson.nyammingsdb.security.UserPrincipal;
-import com.javelwilson.nyammingsdb.shared.*;
+import com.javelwilson.nyammingsdb.shared.AmazonSES;
+import com.javelwilson.nyammingsdb.shared.Utils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,9 @@ public class UserService implements UserDetailsService {
     RoleRepository roleRepository;
 
     @Autowired
+    PasswordResetTokenRepository passwordResetTokenRepository;
+
+    @Autowired
     Utils utils;
 
     @Autowired
@@ -58,9 +64,9 @@ public class UserService implements UserDetailsService {
 
         Collection<RoleEntity> roleEntities = new HashSet<>();
 
-        for(String role: userDto.getRoles()) {
+        for (String role : userDto.getRoles()) {
             RoleEntity roleEntity = roleRepository.findByName(role);
-            if(roleEntity != null) {
+            if (roleEntity != null) {
                 roleEntities.add(roleEntity);
             }
         }
@@ -102,13 +108,14 @@ public class UserService implements UserDetailsService {
 
         if (page > 0) page = page - 1;
         if (limit > 50) limit = 50;
-        
+
         Pageable pageRequest = PageRequest.of(page, limit);
 
         Page<UserEntity> userPages = userRepository.findAll(pageRequest);
         List<UserEntity> userEntities = userPages.getContent();
 
-        Type listType = new TypeToken<List<UserDto>>(){}.getType();
+        Type listType = new TypeToken<List<UserDto>>() {
+        }.getType();
         ModelMapper modelMapper = new ModelMapper();
         List<UserDto> usersDto = modelMapper.map(userEntities, listType);
 
@@ -162,5 +169,53 @@ public class UserService implements UserDetailsService {
         }
 
         return false;
+    }
+
+    public boolean requestPassordReset(String email) {
+
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null) {
+            return false;
+        }
+
+        String token = utils.generatePasswordResetToken(userEntity.getUserId());
+
+        PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+        passwordResetTokenEntity.setToken(token);
+        passwordResetTokenEntity.setUsers(userEntity);
+        passwordResetTokenRepository.save(passwordResetTokenEntity);
+
+        return amazonSES.sendPasswordResetRequest(userEntity.getFirstName(), userEntity.getEmail(), token);
+    }
+
+    public boolean resetPassword(String token, String password) {
+
+        boolean returnValue = false;
+
+        if (utils.hasTokenExpired(token)) {
+            return returnValue;
+        }
+
+        PasswordResetTokenEntity passwordResetTokenEntity = passwordResetTokenRepository.findByToken(token);
+
+        if (passwordResetTokenEntity == null) {
+            return returnValue;
+        }
+
+        String encryptedPassword = bCryptPasswordEncoder.encode(password);
+        UserEntity userEntity = passwordResetTokenEntity.getUsers();
+        userEntity.setEncryptedPassword(encryptedPassword);
+        userEntity = userRepository.save(userEntity);
+
+        if (userEntity != null && userEntity.getEncryptedPassword().equalsIgnoreCase(encryptedPassword)) {
+            returnValue = true;
+        }
+
+        passwordResetTokenRepository.delete(passwordResetTokenEntity);
+
+        return returnValue;
+
+
     }
 }
