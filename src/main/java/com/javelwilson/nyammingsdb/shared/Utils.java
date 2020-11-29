@@ -44,6 +44,14 @@ public class Utils {
         return generateRandomString(length);
     }
 
+    public String generateApplicationId(int length) {
+        return generateRandomString(length);
+    }
+
+    public String generateApplicationKey(int length) {
+        return generateRandomString(length);
+    }
+
     public String generateRestaurantId(int length) {
         return generateRandomString(length);
     }

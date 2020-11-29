@@ -1,6 +1,7 @@
 package com.javelwilson.nyammingsdb.service;
 
 import com.javelwilson.nyammingsdb.dto.UserDto;
+import com.javelwilson.nyammingsdb.entity.ApplicationEntity;
 import com.javelwilson.nyammingsdb.entity.PasswordResetTokenEntity;
 import com.javelwilson.nyammingsdb.entity.RoleEntity;
 import com.javelwilson.nyammingsdb.entity.UserEntity;
@@ -23,9 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -61,6 +60,15 @@ public class UserService implements UserDetailsService {
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(userId));
         userEntity.setEmailVerificationStatus(false);
+
+        ApplicationEntity applicationEntity = new ApplicationEntity();
+        applicationEntity.setApplicationId(utils.generateApplicationId(30));
+        applicationEntity.setApplicationKey(utils.generateApplicationKey(30));
+        applicationEntity.setName("Default Application");
+        applicationEntity.setDescription("Default application");
+        applicationEntity.setUser(userEntity);
+
+        userEntity.setApplications(Arrays.asList(applicationEntity));
 
         Collection<RoleEntity> roleEntities = new HashSet<>();
 

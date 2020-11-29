@@ -65,7 +65,7 @@ public class UserController {
 
     @PostMapping(consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     public UserResponseModel createUser(@RequestBody UserRequestModel userRequestModel) {
-        UserResponseModel userResponseModel = new UserResponseModel();
+        UserResponseModel userResponseModel;
 
         ModelMapper modelMapper = new ModelMapper();
         UserDto userDto = modelMapper.map(userRequestModel, UserDto.class);
