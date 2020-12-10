@@ -112,6 +112,20 @@ public class UserService implements UserDetailsService {
         return userDto;
     }
 
+    public UserDto getUserByEmail(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null) {
+            throw new RuntimeException("User Not Found");
+        }
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userEntity.getUserId());
+        userDto.setFirstName(userEntity.getFirstName());
+        userDto.setLastName(userEntity.getLastName());
+        return userDto;
+    }
+
     public List<UserDto> getUsers(int page, int limit) {
 
         if (page > 0) page = page - 1;
@@ -133,6 +147,14 @@ public class UserService implements UserDetailsService {
     public UserDto updateUser(String userId, UserDto userDto) {
         String firstName = userDto.getFirstName();
         String lastName = userDto.getLastName();
+        String address = userDto.getAddress();
+        Integer postCode = userDto.getPostCode();
+        String city = userDto.getCity();
+        String state = userDto.getState();
+        String country = userDto.getCountry();
+        String company = userDto.getCompany();
+        String website = userDto.getWebsite();
+
         UserEntity userEntity = userRepository.findByUserId(userId);
         if (userEntity == null) {
             throw new RuntimeException("User Not Found");
@@ -144,6 +166,34 @@ public class UserService implements UserDetailsService {
 
         if (lastName != null) {
             userEntity.setLastName(lastName);
+        }
+
+        if (address != null) {
+            userEntity.setAddress(address);
+        }
+
+        if (postCode != null) {
+            userEntity.setPostCode(postCode);
+        }
+
+        if (city != null) {
+            userEntity.setCity(city);
+        }
+
+        if (state != null) {
+            userEntity.setState(state);
+        }
+
+        if (country != null) {
+            userEntity.setCountry(country);
+        }
+
+        if (company != null) {
+            userEntity.setCompany(company);
+        }
+
+        if (website != null) {
+            userEntity.setWebsite(website);
         }
 
         userEntity = userRepository.save(userEntity);

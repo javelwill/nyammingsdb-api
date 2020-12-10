@@ -20,4 +20,11 @@ public class UserDto implements Serializable {
     private Boolean emailVerifcationStatus = false;
     private List<ApplicationDto> applications;
     private Collection<String> roles;
+    private String address;
+    private Integer postCode;
+    private String city;
+    private String state;
+    private String country;
+    private String company;
+    private String website;
 }

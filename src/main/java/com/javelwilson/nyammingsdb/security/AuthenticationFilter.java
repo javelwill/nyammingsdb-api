@@ -1,9 +1,14 @@
 package com.javelwilson.nyammingsdb.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javelwilson.nyammingsdb.SpringApplicationContext;
+import com.javelwilson.nyammingsdb.dto.UserDto;
 import com.javelwilson.nyammingsdb.model.LoginRequestModel;
+import com.javelwilson.nyammingsdb.service.IUserService;
+import com.javelwilson.nyammingsdb.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -57,6 +63,16 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                     .signWith(SignatureAlgorithm.HS512, securityConstants.getSecret())
                     .compact();
 
-        response.addHeader(securityConstants.getHeader(), securityConstants.getTokenPrefix() + token);
+        UserService userService = (UserService) SpringApplicationContext.getBean("userService");
+        UserDto userDto = userService.getUserByEmail(username);
+
+        HashMap userInfo = new HashMap();
+        userInfo.put("token", securityConstants.getTokenPrefix() + token);
+        userInfo.put("userId", userDto.getUserId());
+        userInfo.put("firstName", userDto.getFirstName());
+        userInfo.put("lastName", userDto.getLastName());
+
+        response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+        response.getOutputStream().print(new ObjectMapper().writeValueAsString(userInfo));
     }
 }

@@ -43,6 +43,20 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private Boolean emailVerificationStatus = false;
 
+    private String address;
+
+    private Integer postCode;
+
+    private String city;
+
+    private String state;
+
+    private String country;
+
+    private String company;
+
+    private String website;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ApplicationEntity> applications;
 
