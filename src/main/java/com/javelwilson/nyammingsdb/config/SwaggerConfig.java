@@ -36,13 +36,29 @@ public class SwaggerConfig {
     );
 
     @Bean
-    public Docket apiDocket() {
+    public Docket internalDocket() {
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("internal")
                 .apiInfo(apiInfo)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.javelwilson.nyammingsdb"))
                 .paths(PathSelectors.any())
+                .build()
+                .directModelSubstitute(Time.class, String.class)
+                .directModelSubstitute(DayOfWeek.class, String.class);
+        return docket;
+    }
+
+    @Bean
+    public Docket externalDocket() {
+
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("external")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.javelwilson.nyammingsdb"))
+                .paths(PathSelectors.ant("/restaurants/**"))
                 .build()
                 .directModelSubstitute(Time.class, String.class)
                 .directModelSubstitute(DayOfWeek.class, String.class);
