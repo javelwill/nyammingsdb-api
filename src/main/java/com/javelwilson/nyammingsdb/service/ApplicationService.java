@@ -128,4 +128,24 @@ public class ApplicationService {
 
         return applicationDto;
     }
+
+    public ApplicationDto deleteApplication(String email, String applicationId) {
+
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        ApplicationEntity applicationEntity = applicationRepository.findByUserAndApplicationId(userEntity, applicationId);
+
+        if (applicationEntity == null) {
+            throw new RuntimeException("Application Not Found");
+        }
+
+        applicationRepository.delete(applicationEntity);
+
+        ModelMapper modelMapper = new ModelMapper();
+        ApplicationDto applicationDto = modelMapper.map(applicationEntity, ApplicationDto.class);
+
+        return applicationDto;
+
+
+    }
 }
