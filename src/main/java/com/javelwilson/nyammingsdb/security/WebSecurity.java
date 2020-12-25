@@ -27,11 +27,19 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.cors().and()
                 .csrf().disable()
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/v2/api-docs",
+                        "/swagger-resources/**",
+                        "/swagger-ui.html**",
+                        "/webjars/**",
+                        "favicon.ico"
+                ).permitAll()
                 .antMatchers("/h2-console/**")
                 .permitAll()
                 .antMatchers("/actuator/**")
@@ -40,7 +48,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/users/email-verification")
                 .permitAll().
-        antMatchers(HttpMethod.POST, "/users/password-reset-request")
+                antMatchers(HttpMethod.POST, "/users/password-reset-request")
                 .permitAll().
                 antMatchers(HttpMethod.POST, "/users/reset-password")
                 .permitAll()
@@ -48,7 +56,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .addFilter(new AuthenticationFilter(authenticationManager(),securityConstants))
+                .addFilter(new AuthenticationFilter(authenticationManager(), securityConstants))
                 .addFilter(new AuthorizationFilter(authenticationManager(), securityConstants, userRepository))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
