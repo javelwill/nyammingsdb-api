@@ -65,7 +65,7 @@ public class ApplicationController {
     }
 
     @PostMapping(consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
-    public ApplicationResponseModel patchApplication(@RequestBody ApplicationRequestModel applicationRequestModel) {
+    public ApplicationResponseModel createApplication(@RequestBody ApplicationRequestModel applicationRequestModel) {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         ModelMapper modelMapper = new ModelMapper();

@@ -116,6 +116,12 @@ public class ApplicationService {
 
         UserEntity userEntity = userRepository.findByEmail(email);
 
+        List<ApplicationEntity> applicationEntities = applicationRepository.findAllByUser(userEntity);
+
+        if (applicationEntities.size() >= 4) {
+            throw new RuntimeException("Applications Max Limit Reached");
+        }
+
         ModelMapper modelMapper = new ModelMapper();
         ApplicationEntity applicationEntity = modelMapper.map(applicationDto, ApplicationEntity.class);
 
