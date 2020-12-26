@@ -27,30 +27,30 @@ public interface RestaurantController {
     @PostMapping(consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     RestaurantResponseModel createRestaurant(@Valid @RequestBody RestaurantRequestModel restaurantRequestModel);
 
-    @PatchMapping(path = "/{id}", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
+    @PatchMapping(path = "/restaurants/{id}", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     RestaurantResponseModel patchRestaurant(@PathVariable String id, @RequestBody RestaurantRequestModel restaurantRequestModel);
 
-    @GetMapping(path = "/{id}", produces = {APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/api/restaurants/{id}", produces = {APPLICATION_JSON_VALUE})
     RestaurantResponseModel getRestaurant(@PathVariable String id);
 
-    @DeleteMapping(path = "/{id}", produces = {APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/restaurants/{id}", produces = {APPLICATION_JSON_VALUE})
     RestaurantResponseModel deleteRestaurant(@PathVariable String id);
 
-    @PostMapping(path = "/{id}/locations", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/restaurants/{id}/locations", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     LocationResponseModel addLocation(@PathVariable String id, @RequestBody LocationRequestModel locationRequestModel);
 
-    @GetMapping(path = "/{id}/locations", produces = {APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/api/restaurants/{id}/locations", produces = {APPLICATION_JSON_VALUE})
     List<LocationResponseModel> getRestaurantLocations(@PathVariable String id);
 
-    @GetMapping(path = "/{restaurantId}/locations/{locationId}", produces = {APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/api/restaurants/{restaurantId}/locations/{locationId}", produces = {APPLICATION_JSON_VALUE})
     LocationResponseModel getRestaurantLocation(@PathVariable String restaurantId, @PathVariable String locationId);
 
-    @PostMapping(path = "/{id}/menus", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/restaurants/{id}/menus", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     MenuResponseModel addMenu(@PathVariable String id, @RequestBody MenuRequestModel menuRequestModel);
 
-    @GetMapping(path = "/{id}/menus", produces = {APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/api/restaurants/{id}/menus", produces = {APPLICATION_JSON_VALUE})
     List<MenuResponseModel> getRestaurantMenus(@PathVariable String id);
 
-    @GetMapping(path = "/{restaurantId}/menus/{menuId}", produces = {APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/api/restaurants/{restaurantId}/menus/{menuId}", produces = {APPLICATION_JSON_VALUE})
     MenuResponseModel getRestaurantMenu(@PathVariable String restaurantId, @PathVariable String menuId);
 }

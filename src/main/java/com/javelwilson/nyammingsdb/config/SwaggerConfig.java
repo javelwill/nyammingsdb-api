@@ -58,7 +58,7 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.javelwilson.nyammingsdb"))
-                .paths(PathSelectors.ant("/restaurants/**"))
+                .paths(PathSelectors.ant("/api/restaurants/**"))
                 .build()
                 .directModelSubstitute(Time.class, String.class)
                 .directModelSubstitute(DayOfWeek.class, String.class);

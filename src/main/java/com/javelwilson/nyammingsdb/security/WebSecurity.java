@@ -32,6 +32,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
+                .regexMatchers("\\/v2\\/api-docs\\?group=internal")
+                .hasRole("ADMIN")
                 .antMatchers(
                         HttpMethod.GET,
                         "/v2/api-docs",
