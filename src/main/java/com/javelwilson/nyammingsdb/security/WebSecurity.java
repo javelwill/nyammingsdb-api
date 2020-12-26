@@ -54,7 +54,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .permitAll().
                 antMatchers(HttpMethod.POST, "/users/reset-password")
                 .permitAll()
-                .antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("DELETE_AUTHORITY")
+                .antMatchers(HttpMethod.DELETE, "/users/**")
+                .hasAuthority("DELETE_AUTHORITY")
+                .antMatchers(HttpMethod.GET, "/api/restaurants/**")
+                .permitAll()
+                .antMatchers("/restaurants")
+                .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

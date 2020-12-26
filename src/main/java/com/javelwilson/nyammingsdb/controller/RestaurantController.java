@@ -17,14 +17,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Validated
 public interface RestaurantController {
 
-    @GetMapping(produces = {APPLICATION_JSON_VALUE})
+
+    @GetMapping(path = "/api/restaurants", produces = {APPLICATION_JSON_VALUE})
     List<RestaurantResponseModel> getRestaurants(@RequestParam(value = "page", defaultValue = "0")
                                                          int page,
                                                  @RequestParam(value = "limit", defaultValue = "10")
                                                  @Min(1) @Max(50)
                                                          int limit);
 
-    @PostMapping(consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
+    @PostMapping(path="/restaurants", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     RestaurantResponseModel createRestaurant(@Valid @RequestBody RestaurantRequestModel restaurantRequestModel);
 
     @PatchMapping(path = "/restaurants/{id}", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
