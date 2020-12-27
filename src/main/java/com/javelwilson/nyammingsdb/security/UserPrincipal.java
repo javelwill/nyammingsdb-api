@@ -3,6 +3,7 @@ package com.javelwilson.nyammingsdb.security;
 import com.javelwilson.nyammingsdb.entity.AuthorityEntity;
 import com.javelwilson.nyammingsdb.entity.RoleEntity;
 import com.javelwilson.nyammingsdb.entity.UserEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +27,7 @@ public class UserPrincipal implements UserDetails {
 
         Collection<RoleEntity> roles = userEntity.getRoles();
 
-        if(roles == null) return authorities;
+        if (roles == null) return authorities;
 
         roles.forEach((role) -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
@@ -68,5 +69,6 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return userEntity.getEmailVerificationStatus();
+
     }
 }

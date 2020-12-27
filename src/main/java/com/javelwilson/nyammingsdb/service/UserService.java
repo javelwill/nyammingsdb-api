@@ -14,6 +14,7 @@ import com.javelwilson.nyammingsdb.shared.Utils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +47,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Value("${application.email-verification}")
+    Boolean emailVerification;
 
     public UserDto createUser(UserDto userDto) {
 
@@ -85,7 +89,9 @@ public class UserService implements UserDetailsService {
 
         userDto = modelMapper.map(userEntity, UserDto.class);
 
-        amazonSES.verifyEmail(userDto);
+        if (emailVerification) {
+            amazonSES.verifyEmail(userDto);
+        }
 
         return userDto;
     }
@@ -94,7 +100,9 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email);
         if (userEntity == null) throw new UsernameNotFoundException(email);
-
+        if (!emailVerification) {
+            userEntity.setEmailVerificationStatus(true);
+        }
         return new UserPrincipal(userEntity);
 
 //        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
