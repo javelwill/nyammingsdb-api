@@ -34,7 +34,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .regexMatchers("\\/v2\\/api-docs\\?group=internal")
                 .hasRole("ADMIN")
-                .antMatchers(
+                .mvcMatchers(
                         HttpMethod.GET,
                         "/v2/api-docs",
                         "/swagger-resources/**",
@@ -42,23 +42,25 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         "/webjars/**",
                         "favicon.ico"
                 ).permitAll()
-                .antMatchers("/h2-console/**")
+                .mvcMatchers("/h2-console/**")
                 .permitAll()
-                .antMatchers("/actuator/**")
+                .mvcMatchers("/actuator/**")
                 .permitAll()
-                .antMatchers(HttpMethod.POST, "/users")
+                .mvcMatchers(HttpMethod.POST, "/users")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/users/email-verification")
+                .mvcMatchers(HttpMethod.GET, "/users")
+                .hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.GET, "/users/email-verification")
                 .permitAll().
-                antMatchers(HttpMethod.POST, "/users/password-reset-request")
+                mvcMatchers(HttpMethod.POST, "/users/password-reset-request")
                 .permitAll().
-                antMatchers(HttpMethod.POST, "/users/reset-password")
+                mvcMatchers(HttpMethod.POST, "/users/reset-password")
                 .permitAll()
-                .antMatchers(HttpMethod.DELETE, "/users/**")
+                .mvcMatchers(HttpMethod.DELETE, "/users/**")
                 .hasAuthority("DELETE_AUTHORITY")
-                .antMatchers(HttpMethod.GET, "/api/restaurants/**")
+                .mvcMatchers(HttpMethod.GET, "/api/restaurants/**")
                 .permitAll()
-                .antMatchers("/restaurants")
+                .mvcMatchers("/restaurants")
                 .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()

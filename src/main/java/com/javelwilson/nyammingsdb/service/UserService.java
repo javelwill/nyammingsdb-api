@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,7 +27,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -109,10 +114,20 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDto getUserById(String userId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = (String) authentication.getPrincipal();
+        boolean hasAdminRole = authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+
         UserEntity userEntity = userRepository.findByUserId(userId);
 
         if (userEntity == null) {
             throw new RuntimeException("User Not Found");
+        }
+
+        if (!(email.equals(userEntity.getEmail()) || hasAdminRole)) {
+            throw new RuntimeException("UnAuthorized");
         }
 
         ModelMapper modelMapper = new ModelMapper();
@@ -135,7 +150,6 @@ public class UserService implements UserDetailsService {
     }
 
     public List<UserDto> getUsers(int page, int limit) {
-
         if (page > 0) page = page - 1;
         if (limit > 50) limit = 50;
 
@@ -153,6 +167,11 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDto updateUser(String userId, UserDto userDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = (String) authentication.getPrincipal();
+        boolean hasAdminRole = authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+
         String firstName = userDto.getFirstName();
         String lastName = userDto.getLastName();
         String address = userDto.getAddress();
@@ -166,6 +185,10 @@ public class UserService implements UserDetailsService {
         UserEntity userEntity = userRepository.findByUserId(userId);
         if (userEntity == null) {
             throw new RuntimeException("User Not Found");
+        }
+
+        if (!(email.equals(userEntity.getEmail()) || hasAdminRole)) {
+            throw new RuntimeException("UnAuthorized");
         }
 
         if (firstName != null) {

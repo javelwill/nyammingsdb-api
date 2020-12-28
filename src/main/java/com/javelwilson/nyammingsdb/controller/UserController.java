@@ -9,6 +9,7 @@ import com.javelwilson.nyammingsdb.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
@@ -54,6 +55,7 @@ public class UserController {
 
     @PatchMapping(path = "/{userId}", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
     public UserResponseModel updateUser(@PathVariable String userId, @RequestBody UserRequestModel userRequestModel) {
+
         ModelMapper modelMapper = new ModelMapper();
         UserDto userDto = modelMapper.map(userRequestModel, UserDto.class);
 
